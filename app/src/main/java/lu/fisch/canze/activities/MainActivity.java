@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
     private static String bluetoothDeviceName = null;
 
     // url of gateway if in use
+     public final static boolean pokeSecureGateway = false;
     private static String gatewayUrl = null;
 
     // public final static int RECEIVE_MESSAGE      = 1;
@@ -199,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
     private final static int BLUETOOTH_CONNECTED = 23;
     protected Menu mOptionsMenu; // needed to find BT symbol
     private int mBtState = BLUETOOTH_SEARCH;
+
+    private static final int MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT = 5678;
+
 
     private boolean storageGranted = false;
     private int startAnotherFragmentIndex = -2;
@@ -327,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
             bluetoothBackgroundMode = settings.getBoolean(SettingsActivity.SETTING_DEVICE_USE_BACKGROUND_MODE, false);
             milesMode = settings.getBoolean(SettingsActivity.SETTING_CAR_USE_MILES, false);
             altFieldsMode = settings.getBoolean(SettingsActivity.SETTING_DEVICE_USE_ISOTP_FIELDS, false);
-            dataExportMode = settings.getBoolean(SettingsActivity.SETTING_LOGGING_USE_SD_CARD, false);
+//            dataExportMode = settings.getBoolean(SettingsActivity.SETTING_LOGGING_USE_SD_CARD, false);
             debugLogMode = settings.getBoolean(SettingsActivity.SETTING_LOGGING_DEBUG_LOG, false);
             fieldLogMode = settings.getBoolean(SettingsActivity.SETTING_LOGGING_FIELDS_LOG, false);
             toastLevel = settings.getInt(SettingsActivity.SETTING_DISPLAY_TOAST_LEVEL, MainActivity.TOAST_ELM);
@@ -447,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -456,6 +461,15 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
                     storageGranted = false;
                     MainActivity.debug("MainActivity.onRequestPermissionsResult:storage not granted");
                 }
+                break;
+            case MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Permission granted, proceed with your logic
+            initializeBluetooth();
+        } else {
+            // Permission denied, handle the case
+            Toast.makeText(this, "Bluetooth permission is required for this app to function", Toast.LENGTH_SHORT).show();
+        }
                 break;
 
             // other 'case' lines to check for other
@@ -481,6 +495,14 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
             ActivityCompat.requestPermissions(instance, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
             storageGranted = true;
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            // Request the permission
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+        } else {
+            // Permission is already granted, proceed with your logic
+            initializeBluetooth();
         }
 
         handleDarkMode();
@@ -1255,5 +1277,41 @@ public class MainActivity extends AppCompatActivity implements FieldListener /*,
         // - it selects Internal storage instead of SD card. Why is somewhat unclear, but more or less OK for now
         return getExternalFilesDir(null).getAbsolutePath() + "/";
     }
+
+    private void initializeBluetooth() {
+        //    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //    if (bluetoothAdapter == null) {
+        //        // Device doesn't support Bluetooth
+        //        Toast.makeText(this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show();
+        //        return;
+        //    }
+        //
+        //    if (!bluetoothAdapter.isEnabled()) {
+        //        // Bluetooth is not enabled, prompt the user to enable it
+        //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+        //            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        //            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        //        } else {
+        //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+        //        }
+        //    } else {
+        //        // Bluetooth is enabled, proceed with your logic
+        //        startBluetoothDiscovery();
+        //    }
+    }
+
+    //private void startBluetoothDiscovery() {
+    //    BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    //    if (bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+    //        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+    //            if (bluetoothAdapter.isDiscovering()) {
+    //                bluetoothAdapter.cancelDiscovery();
+    //            }
+    //            bluetoothAdapter.startDiscovery();
+    //        } else {
+    //            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, MY_PERMISSIONS_REQUEST_BLUETOOTH_CONNECT);
+    //        }
+    //    }
+    //}
 }
 

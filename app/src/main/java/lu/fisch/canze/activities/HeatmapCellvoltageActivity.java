@@ -45,6 +45,7 @@ public class HeatmapCellvoltageActivity extends CanzeActivity implements FieldLi
     private double mean = 0;
     private double lowest, highest;
     private double cutoff;
+    private final boolean[] balancingBits  = new boolean[97];
     private final double[] lastVoltage = {0,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4};
     private int lastCell = 96;
     private int totalCells = 96;

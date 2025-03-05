@@ -315,7 +315,7 @@ public class SettingsActivity extends AppCompatActivity {
                     removeSetting = true;
                     break;
                 case "optDataExport":
-                    editor.putBoolean(SETTING_LOGGING_USE_SD_CARD, Boolean.parseBoolean(oldValue));
+                    // editor.putBoolean(SETTING_LOGGING_USE_SD_CARD, Boolean.parseBoolean(oldValue));
                     removeSetting = true;
                     break;
                 case "optDark":
@@ -544,43 +544,43 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            findPreference(SETTING_LOGGING_USE_SD_CARD).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(final Preference preference) {
-                    // add code here to check external SDcard is avail, writeable and has sufficient space
-                    if (!MainActivity.getInstance().isExternalStorageWritable()) {
-                        final Context context = getActivity();
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-                        // set title
-                        alertDialogBuilder.setTitle(R.string.prompt_Sorry);
-
-                        // set dialog message
-                        alertDialogBuilder
-                                .setMessage(Html.fromHtml(MainActivity.getStringSingle(R.string.prompt_NoSd)))
-                                .setCancelable(true)
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // if this button is clicked, close
-                                        // current activity
-                                        setSwitchPreferenceStatus(((SwitchPreference) preference), SETTING_LOGGING_USE_SD_CARD, false);
-                                        dialog.cancel();
-                                    }
-                                });
-
-                        // create alert dialog
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-
-                        // show it
-                        alertDialog.show();
-                        MainActivity.dataExportMode = false; // due to SDcard not writeable
-
-                        return false;
-                    }
-
-                    return true;
-                }
-            });
+//            findPreference(SETTING_LOGGING_USE_SD_CARD).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+//                @Override
+//                public boolean onPreferenceClick(final Preference preference) {
+//                    // add code here to check external SDcard is avail, writeable and has sufficient space
+//                    if (!MainActivity.getInstance().isExternalStorageWritable()) {
+//                        final Context context = getActivity();
+//                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//
+//                        // set title
+//                        alertDialogBuilder.setTitle(R.string.prompt_Sorry);
+//
+//                        // set dialog message
+//                        alertDialogBuilder
+//                                .setMessage(Html.fromHtml(MainActivity.getStringSingle(R.string.prompt_NoSd)))
+//                                .setCancelable(true)
+//                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int id) {
+//                                        // if this button is clicked, close
+//                                        // current activity
+////                                        setSwitchPreferenceStatus(((SwitchPreference) preference), SETTING_LOGGING_USE_SD_CARD, false);
+//                                        dialog.cancel();
+//                                    }
+//                                });
+//
+//                        // create alert dialog
+//                        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//                        // show it
+//                        alertDialog.show();
+//                        MainActivity.dataExportMode = false; // due to SDcard not writeable
+//
+//                        return false;
+//                    }
+//
+//                    return true;
+//                }
+//            });
 
             // On debug log check
             findPreference(SETTING_LOGGING_DEBUG_LOG).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
